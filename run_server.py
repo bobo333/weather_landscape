@@ -118,10 +118,11 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
 
     def IndexHtml(self):
+        cfg = OpenWeatherMapSettings.Fill( secrets, WeatherLandscape.TMP_DIR )
     
         body = '<h1>Weather as Landscape</h1>'
         body+='<p>Place: '+("%.4f" % secrets.OWM_LAT) +' , '+("%.4f" % secrets.OWM_LON)+'</p>'
-        body+='<p><img src="'+USERFILENAME+'" alt="Weather" "></p>'
+        body+='<p><img src="' + cfg.BASE_PATH + '/'+USERFILENAME+'" alt="Weather" "></p>'
         body+='<p>ESP32 URL: <span id="eink"></span></p>'
         body+='<script> document.getElementById("eink").innerHTML = window.location+"'+EINKFILENAME+'" ;</script>'
             
@@ -131,6 +132,7 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
             <html lang="en">
               <head>
                 <meta charset="utf-8">
+                <link rel='shortcut icon' type='image/x-icon' href='""" + cfg.BASE_PATH + """/favicon.ico' />
                 <title>Weather as Landscape</title>
               </head>
               <body> """ + body + """

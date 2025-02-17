@@ -11,6 +11,7 @@ import secrets
 import socket
 
 from weather_landscape import WeatherLandscape
+from p_weather.openweathermap import OpenWeatherMapSettings
 
 
 SERV_IPADDR = "0.0.0.0"
@@ -91,7 +92,20 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
             return
        
         img = WEATHER.MakeImage() 
-        img.save(user_file_name) 
+
+
+        cfg = OpenWeatherMapSettings.Fill( secrets, WeatherLandscape.TMP_DIR )
+        if cfg.UPSCALE_FACTOR and cfg.UPSCALE_FACTOR > 1:
+            w = img.size[0]
+            h = img.size[1]
+
+            new_w = w * cfg.UPSCALE_FACTOR
+            new_h = h * cfg.UPSCALE_FACTOR
+
+            big_img = img.resize((new_w, new_h))
+            big_img.save(user_file_name)
+        else:
+            img.save(user_file_name)
         
         img = img.rotate(-90, expand=True)   
         img = img.transpose(Image.FLIP_TOP_BOTTOM)  

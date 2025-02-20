@@ -84,7 +84,10 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
 
 
     def CreateWeatherImages(self):
-                    
+        cfg = OpenWeatherMapSettings.Fill( secrets, WeatherLandscape.TMP_DIR )
+        os.environ['TZ'] = cfg.TIMEZONE
+        time.tzset()
+
         user_file_name = WEATHER.TmpFilePath(USERFILENAME)
         eink_file_name = WEATHER.TmpFilePath(EINKFILENAME)
        
@@ -93,8 +96,6 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
        
         img = WEATHER.MakeImage() 
 
-
-        cfg = OpenWeatherMapSettings.Fill( secrets, WeatherLandscape.TMP_DIR )
         if cfg.UPSCALE_FACTOR and cfg.UPSCALE_FACTOR > 1:
             w = img.size[0]
             h = img.size[1]

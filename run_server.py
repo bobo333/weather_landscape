@@ -121,10 +121,15 @@ class WeatherLandscapeServer(BaseHTTPRequestHandler):
         cfg = OpenWeatherMapSettings.Fill( secrets, WeatherLandscape.TMP_DIR )
     
         body = '<h1>Weather as Landscape</h1>'
-        body+='<p>Place: '+("%.4f" % secrets.OWM_LAT) +' , '+("%.4f" % secrets.OWM_LON)+'</p>'
+        if cfg.WEB_MODE:
+            body+='<p>Place: '+ cfg.DISPLAY_LOC +'</p>'
+        else:
+            body+='<p>Place: '+("%.4f" % secrets.OWM_LAT) +' , '+("%.4f" % secrets.OWM_LON)+'</p>'
         body+='<p><img src="' + cfg.BASE_PATH + '/'+USERFILENAME+'" alt="Weather" "></p>'
-        body+='<p>ESP32 URL: <span id="eink"></span></p>'
-        body+='<script> document.getElementById("eink").innerHTML = window.location+"'+EINKFILENAME+'" ;</script>'
+
+        if not cfg.WEB_MODE:
+            body+='<p>ESP32 URL: <span id="eink"></span></p>'
+            body+='<script> document.getElementById("eink").innerHTML = window.location+"'+EINKFILENAME+'" ;</script>'
             
             
         return """

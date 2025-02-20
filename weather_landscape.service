@@ -1,0 +1,9 @@
+[Unit]
+Description=Weather Landscape Service
+After=network.target
+
+[Service]
+Environment=PYTHONUNBUFFERED=1
+WorkingDirectory=/home/steve/code/weather_landscape
+ExecStart=/home/steve/code/weather_landscape/.virtualenv/bin/python /home/steve/code/weather_landscape/run_server.py
+Restart=always
